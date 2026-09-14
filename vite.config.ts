@@ -2,7 +2,12 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// Base path: '/' in dev/preview, '/AssistenteMasterPigri/' when the
+// GitHub Pages workflow builds with VITE_BASE set.
+const base = process.env.VITE_BASE || '/'
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     VitePWA({
@@ -11,6 +16,8 @@ export default defineConfig({
       manifest: {
         name: 'Master Pigri - DM Assistant',
         short_name: 'MasterPigri',
+        start_url: base,
+        scope: base,
         description: 'Real-time session assistant for D&D 5e Dungeon Masters',
         theme_color: '#09090b',
         background_color: '#09090b',
