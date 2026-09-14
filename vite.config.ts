@@ -36,6 +36,19 @@ export default defineConfig({
   ],
   server: {
     host: '0.0.0.0',
+    port: 5173,
+    hmr: {
+      clientPort: 443
+    },
+    cors: true,
+    headers: {
+      'X-Frame-Options': 'ALLOWALL'
+    },
+    // @ts-ignore - allow all hosts for preview
+    allowedHosts: true as any
+  },
+  preview: {
+    host: '0.0.0.0',
     port: 5173
   }
 })
