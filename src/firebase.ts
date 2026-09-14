@@ -27,12 +27,12 @@ import { getFirestore } from 'firebase/firestore';
 // ============================================================================
 
 const INLINE_FALLBACK = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyDWXQuvwvn8M9t9EIodjXF_Y4o1yrXibZk",
+  authDomain: "assistentemasterpigri.firebaseapp.com",
+  projectId: "assistentemasterpigri",
+  storageBucket: "assistentemasterpigri.firebasestorage.app",
+  messagingSenderId: "528695691734",
+  appId: "1:528695691734:web:9d0304ae27bc43e2defc77"
 };
 
 const env = import.meta.env;
