@@ -28,6 +28,7 @@ interface AppState {
 
   // UI
   activeTab: 'party' | 'generate' | 'encounter' | 'npcs';
+  cloudSync: boolean;
 
   // Actions
   setActiveTab: (tab: AppState['activeTab']) => void;
@@ -83,6 +84,7 @@ export const useStore = create<AppState>((set, get) => ({
   isGenerating: false,
 
   activeTab: 'party',
+  cloudSync: false,
 
   setActiveTab: (tab) => set({ activeTab: tab }),
   setBiome: (biome) => set({ selectedBiome: biome }),
@@ -102,7 +104,7 @@ export const useStore = create<AppState>((set, get) => ({
           const snap = await getDocs(q);
           const parties: Party[] = snap.docs.map(d => d.data() as Party);
           parties.sort((a,b)=>b.updatedAt-a.updatedAt);
-          set({ parties, isLoadingParties: false });
+          set({ parties, isLoadingParties: false, cloudSync: true });
           if (parties.length>0 && !get().activePartyId) {
             const first = parties[0];
             set({ activePartyId: first.id, playerCount: first.playerCount, avgLevel: first.averageLevel });
@@ -112,7 +114,7 @@ export const useStore = create<AppState>((set, get) => ({
       }
       // offline fallback
       const local = loadLocalParties();
-      set({ parties: local, isLoadingParties: false });
+      set({ parties: local, isLoadingParties: false, cloudSync: false });
       if (local.length>0 && !get().activePartyId) {
         const first = local[0];
         set({ activePartyId: first.id, playerCount: first.playerCount, avgLevel: first.averageLevel });
@@ -120,7 +122,7 @@ export const useStore = create<AppState>((set, get) => ({
     } catch (e) {
       console.warn('loadParties failed', e);
       const local = loadLocalParties();
-      set({ parties: local, isLoadingParties: false });
+      set({ parties: local, isLoadingParties: false, cloudSync: false });
     }
   },
 
