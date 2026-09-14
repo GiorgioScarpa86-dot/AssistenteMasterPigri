@@ -3,29 +3,52 @@ import { getAuth, signInAnonymously, onAuthStateChanged, User } from 'firebase/a
 import { getFirestore } from 'firebase/firestore';
 
 // ============================================================================
-// 🔥 FIREBASE CONFIGURATION - PASTE YOUR KEYS HERE
+// 🔥 FIREBASE CONFIGURATION
 // ============================================================================
-// 1. Go to https://console.firebase.google.com/
-// 2. Create a new project (free Spark plan)
-// 3. Go to Project Settings > General > Your apps > Web app
-// 4. Copy the firebaseConfig object and paste below
-// 5. Enable Anonymous Auth: Authentication > Sign-in method > Anonymous > Enable
-// 6. Enable Firestore: Firestore Database > Create database > Start in test mode
+// The app reads your Firebase web-app config from environment variables so
+// that keys do NOT have to be committed to the repository.
 //
-// If you leave these as placeholder, the app will work in OFFLINE MODE
-// using localStorage automatically. No crash.
+// WHERE TO GET THE VALUES
+//   1. https://console.firebase.google.com/ → create a project (free Spark plan)
+//   2. Project Settings → General → Your apps → Web app → copy the config
+//   3. Enable Anonymous Auth: Authentication → Sign-in method → Anonymous
+//   4. Enable Firestore: Firestore Database → Create database → test mode
+//
+// HOW TO PROVIDE THEM (pick one)
+//   A) RECOMMENDED — create a file named `.env.local` in the project root
+//      (already git-ignored), copy `.env.example`, paste the six values,
+//      then (re)start `npm run dev` / `npm run build`.
+//   B) ZERO-CONFIG — paste the values in INLINE_FALLBACK below. Be aware they
+//      will then travel with the repo. Firebase web keys are public
+//      identifiers by design, but protect your data with Firestore rules.
+//
+// If nothing is provided the app runs in OFFLINE MODE using localStorage.
+// No crash. See README.md → "Step 4".
 // ============================================================================
 
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+const INLINE_FALLBACK = {
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
 };
 
-const isConfigured = firebaseConfig.apiKey !== "YOUR_API_KEY_HERE";
+const env = import.meta.env;
+
+const firebaseConfig = {
+  apiKey: env.VITE_FIREBASE_API_KEY || INLINE_FALLBACK.apiKey,
+  authDomain: env.VITE_FIREBASE_AUTH_DOMAIN || INLINE_FALLBACK.authDomain,
+  projectId: env.VITE_FIREBASE_PROJECT_ID || INLINE_FALLBACK.projectId,
+  storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET || INLINE_FALLBACK.storageBucket,
+  messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID || INLINE_FALLBACK.messagingSenderId,
+  appId: env.VITE_FIREBASE_APP_ID || INLINE_FALLBACK.appId
+};
+
+const isConfigured = Boolean(
+  firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId
+);
 
 let app: any = null;
 let auth: any = null;

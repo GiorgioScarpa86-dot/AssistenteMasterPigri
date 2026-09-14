@@ -44,14 +44,22 @@ Open that URL in Chrome/Firefox. **Done!** App works 100% offline.
 
 1. Go to https://console.firebase.google.com/ → Create Project (free Spark plan)
 2. Project Settings → General → Your apps → Web → Copy config
-3. Open `src/firebase.ts` in this project
-4. Replace the placeholder:
-```ts
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE", // ← paste yours here
-  ...
-}
+3. In this project, copy `.env.example` to `.env.local` (git-ignored) and paste
+   the six values there:
+```bash
+cp .env.example .env.local   # then edit .env.local with your values
 ```
+```env
+VITE_FIREBASE_API_KEY=AIza...          # ← paste yours here
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+VITE_FIREBASE_APP_ID=1:123456789:web:abcdef
+```
+   (Prefer a single file? You can also paste the values in `INLINE_FALLBACK`
+   inside `src/firebase.ts` — but then they travel with the repo.)
+4. Restart `npm run dev` (or rebuild) so Vite picks up the variables.
 5. In Firebase Console:
    - Authentication → Sign-in method → Enable Anonymous
    - Firestore Database → Create Database → Start in test mode
